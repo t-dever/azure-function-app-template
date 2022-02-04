@@ -12,6 +12,16 @@ resource "azurerm_storage_account" "storage_account" {
   account_replication_type = "LRS"
 }
 
+resource "azurerm_storage_queue" "storage_queue" {
+  name                 = "testing-queue"
+  storage_account_name = azurerm_storage_account.storage_account.name
+}
+
+resource "azurerm_storage_table" "storage_table" {
+  name                 = "testingTable"
+  storage_account_name = azurerm_storage_account.storage_account.name
+}
+
 resource "azurerm_log_analytics_workspace" "log_analytics" {
   name                = var.log_analytics_workspace_name
   location            = azurerm_resource_group.resource_group.location
@@ -57,13 +67,14 @@ resource "azurerm_function_app" "function_app" {
   version = "~4"
 
   app_settings = {
-    "APPINSIGHTS_INSTRUMENTATIONKEY"  = azurerm_application_insights.application_insights.instrumentation_key,
-    "AzureWebJobsStorage"             = azurerm_storage_account.storage_account.primary_blob_connection_string,
-    "SCM_DO_BUILD_DURING_DEPLOYMENT"  = "true",
-    "PYTHON_ENABLE_WORKER_EXTENSIONS" = "1"
-    "ENABLE_ORYX_BUILD"               = "true",
-    "FUNCTIONS_WORKER_PROCESS_COUNT"  = "5"
-    "FUNCTIONS_WORKER_RUNTIME"        = "python"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"    = azurerm_application_insights.application_insights.instrumentation_key,
+    "AzureWebJobsStorage"               = azurerm_storage_account.storage_account.primary_connection_string,
+    # "AZUREQUEUESTORAGECONNECTIONSTRING" = azurerm_storage_account.storage_account.primary_connection_string,
+    "SCM_DO_BUILD_DURING_DEPLOYMENT"    = "true",
+    "PYTHON_ENABLE_WORKER_EXTENSIONS"   = "1"
+    "ENABLE_ORYX_BUILD"                 = "true",
+    "FUNCTIONS_WORKER_PROCESS_COUNT"    = "5"
+    "FUNCTIONS_WORKER_RUNTIME"          = "python"
   }
 
   site_config {
