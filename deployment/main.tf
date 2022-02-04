@@ -69,7 +69,6 @@ resource "azurerm_function_app" "function_app" {
   app_settings = {
     "APPINSIGHTS_INSTRUMENTATIONKEY"    = azurerm_application_insights.application_insights.instrumentation_key,
     "AzureWebJobsStorage"               = azurerm_storage_account.storage_account.primary_connection_string,
-    # "AZUREQUEUESTORAGECONNECTIONSTRING" = azurerm_storage_account.storage_account.primary_connection_string,
     "SCM_DO_BUILD_DURING_DEPLOYMENT"    = "true",
     "PYTHON_ENABLE_WORKER_EXTENSIONS"   = "1"
     "ENABLE_ORYX_BUILD"                 = "true",
